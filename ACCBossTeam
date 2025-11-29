@@ -13,3 +13,6 @@ return {
             {card = "", trait = ""}
         }
     },
+    
+
+}
