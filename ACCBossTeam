@@ -1,1 +1,15 @@
-
+return {
+    CiferRaidTeam1 = {
+        attack = {
+            {card = "cosmic_villian", trait = "basic"},
+            {card = "white_tiger", trait = "basic"},
+            {card = "white_tiger", trait = "basic"},
+            {card = "white_tiger", trait = "basic"}
+        },
+        support = {
+            {card = "slayer_mark", trait = "basic"},
+            {card = "", trait = ""},
+            {card = "", trait = ""},
+            {card = "", trait = ""}
+        }
+    },
