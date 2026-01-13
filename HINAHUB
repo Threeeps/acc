@@ -10,15 +10,15 @@ local Linkvertise_Link = "https://ads.luarmor.net/get_key?for=Hina_Hub-PQmcKkkVQ
 
 -- Script configurations per game
 local Scripts = {
-    [130247632398296] = {
-        name = "AFSE",
-        script_id = "a8ab07c9581584c7d03ec6b1f46cc219",
-        description = "Anime Fighters Simulator:Endless"
+    [76285745979410] = {
+        name = "Anime Card Collection",
+        script_id = "9efd7aeb253b0c53236b2a1f600e7124",
+        description = "Anime Card Collection"
     },
     -- placement thing
-    -- [PlaceId] = {
+    -- [110829983956014] = {
     --     name = "ACC",
-    --     script_id = "id",
+    --     script_id = "faec2e5ab410523753d5ba96ef3362ed",
     --     description = "Anime CARD CLASH"
     -- },
 }
