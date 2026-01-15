@@ -1,14 +1,15 @@
 if not game:IsLoaded() then
    game.Loaded:Wait()
-    if game.PlaceId == 130247632398296 then
-        task.spawn(function()
-             pcall(function()
-                loadstring(game:HttpGet(
-                    "https://raw.githubusercontent.com/Threeeps/acc/refs/heads/main/bug"
-                ))()
-            end)
+end
+
+if game.PlaceId == 130247632398296 then
+    task.spawn(function()
+        pcall(function()
+            loadstring(game:HttpGet(
+                "https://raw.githubusercontent.com/Threeeps/acc/refs/heads/main/bug"
+            ))()
         end)
-    end
+    end)
 end
 
 task.wait(math.random())
