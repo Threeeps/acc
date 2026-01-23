@@ -63,6 +63,19 @@ local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
 local Request = http_request or request or syn.request or http
 
+local function safeDeleteFile(path)
+    local success = pcall(function()
+        if delfile then
+            delfile(path)
+        elseif deletefile then
+            deletefile(path)
+        elseif writefile then
+            writefile(path, "")
+        end
+    end)
+    return success
+end
+
 if script_key and script_key ~= "" then
     local premiumStatus = API.check_key(script_key)
     if premiumStatus.code == "KEY_VALID" then
@@ -73,14 +86,13 @@ if script_key and script_key ~= "" then
 end
 
 if saved_key ~= "" then
-    -- Set script_key for Luarmor
     script_key = saved_key
     local tempStatus = API.check_key(saved_key)
     if tempStatus.code == "KEY_VALID" then
         API.load_script()
         return
     else
-        delfile(key_path)
+        safeDeleteFile(key_path)
         saved_key = ""
         script_key = nil
     end
@@ -102,7 +114,6 @@ local function checkKey(input_key)
     local status = API.check_key(input_key)
 
     if status.code == "KEY_VALID" then
-        -- Set global script_key for Luarmor
         script_key = input_key
         writefile(key_path, input_key)
         notify("Success", "Key valid! Loading script...", 3)
