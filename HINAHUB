@@ -26,7 +26,7 @@ local Scripts = {
         description = "Anime Card Collection"
     },
     [130247632398296] = {
-        name = "Anime Fighting Simulator:Endless",
+        name = "Anime Fighting Simulator Endless",
         script_id = "a8ab07c9581584c7d03ec6b1f46cc219",
         description = "AFSE Anti-cheat Bypassed"
     },
