@@ -2,17 +2,7 @@ if not game:IsLoaded() then
    game.Loaded:Wait()
 end
 
-if game.PlaceId == 130247632398296 then
-    task.spawn(function()
-        pcall(function()
-            loadstring(game:HttpGet(
-                "https://raw.githubusercontent.com/Threeeps/acc/refs/heads/main/bug2"
-            ))()
-        end)
-    end)
-end
-
-task.wait(3)
+task.wait(2)
 
 local Hub = "Hina Hub"
 local Discord_Invite = "NZHwScVxv3"
