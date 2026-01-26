@@ -13,12 +13,17 @@ local Scripts = {
     [76285745979410] = {
         name = "Anime Card Collection",
         script_id = "9efd7aeb253b0c53236b2a1f600e7124",
-        description = "Anime Card Collection"
+        description = ""
     },
     [130247632398296] = {
         name = "Anime Fighting Simulator Endless",
         script_id = "a8ab07c9581584c7d03ec6b1f46cc219",
-        description = "AFSE Anti-cheat Bypassed"
+        description = ""
+    },
+    [136599248168660] = {
+        name = "Solo Hunter",
+        script_id = "c4f01bee2a28f2293728ededb080705c",
+        description = ""
     },
     -- placement thing
     -- [110829983956014] = {
