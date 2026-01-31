@@ -26,7 +26,7 @@ local Scripts = {
         description = ""
     },
     [110829983956014] = {
-         name = "ACC",
+         name = "Anime Card Clash",
          script_id = "faec2e5ab410523753d5ba96ef3362ed",
          description = "Anime CARD CLASH"
      },
