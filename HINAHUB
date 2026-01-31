@@ -26,11 +26,11 @@ local Scripts = {
         description = ""
     },
     -- placement thing
-    -- [110829983956014] = {
-    --     name = "ACC",
-    --     script_id = "faec2e5ab410523753d5ba96ef3362ed",
-    --     description = "Anime CARD CLASH"
-    -- },
+    [110829983956014] = {
+         name = "ACC",
+         script_id = "faec2e5ab410523753d5ba96ef3362ed",
+         description = "Anime CARD CLASH"
+     },
 }
 
 -- Check if game is supported
