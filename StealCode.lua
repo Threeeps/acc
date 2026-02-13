@@ -1,0 +1,4 @@
+return {
+  "GOLDENDICE",
+  "GEMSGEMSGEMS1",
+}
