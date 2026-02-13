@@ -30,6 +30,11 @@ local Scripts = {
          script_id = "faec2e5ab410523753d5ba96ef3362ed",
          description = "Anime CARD CLASH"
      },
+   [79305036070450] = {
+         name = "Steal a Baddie",
+         script_id = "36c6169a212629563329011d574698a2",
+         description = "Steal a Baddie"
+     },
 }
 
 -- Check if game is supported
