@@ -35,6 +35,11 @@ local Scripts = {
          script_id = "36c6169a212629563329011d574698a2",
          description = "Steal a Baddie"
      },
+   [101640913672688] = {
+         name = "Anime Ghost",
+         script_id = "3d92f8b30257fddaba283735a48c1eb4",
+         description = "Ghost"
+     },
 }
 
 -- Check if game is supported
