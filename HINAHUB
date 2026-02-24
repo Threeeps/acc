@@ -45,6 +45,11 @@ local Scripts = {
          script_id = "c470444ffb23c6e8410bc2fddf0f7f8b",
          description = "Sorcerer"
      },
+   [79910556932462 ] = {
+         name = "Sorcerer Tycoon",
+         script_id = "c470444ffb23c6e8410bc2fddf0f7f8b",
+         description = "Sorcerer"
+     },
 }
 
 -- Check if game is supported
@@ -60,9 +65,12 @@ if not currentGame then
 end
 
 makefolder(Hub)
-local key_path = Hub .. "/" .. currentGame.name .. "_Key.txt"
+
+-- Universal key path (one key for all games)
+local key_path = Hub .. "/Universal_Key.txt"
 local saved_key = isfile(key_path) and readfile(key_path) or ""
 
+-- Use the current game's script_id for API validation
 local API = loadstring(game:HttpGet(
     "https://sdkAPI-public.luarmor.net/library.lua"
 ))()
@@ -85,15 +93,56 @@ local function safeDeleteFile(path)
     return success
 end
 
+-- Helper: try validating a key against all game script_ids
+local function validateKeyUniversal(key)
+    for placeId, data in pairs(Scripts) do
+        local tempAPI = loadstring(game:HttpGet(
+            "https://sdkAPI-public.luarmor.net/library.lua"
+        ))()
+        tempAPI.script_id = data.script_id
+
+        local status = tempAPI.check_key(key)
+        if status.code == "KEY_VALID" then
+            return true, data.script_id, status
+        end
+    end
+    return false, nil, nil
+end
+
+-- Helper: load the script with the correct script_id
+local function loadWithScriptId(scriptId)
+    local loadAPI = loadstring(game:HttpGet(
+        "https://sdkAPI-public.luarmor.net/library.lua"
+    ))()
+    loadAPI.script_id = currentGame.script_id
+    loadAPI.check_key(script_key)
+    loadAPI.load_script()
+end
+
+-- Try script_key global first
 if script_key and script_key ~= "" then
     local premiumStatus = API.check_key(script_key)
     if premiumStatus.code == "KEY_VALID" then
         writefile(key_path, script_key)
         API.load_script()
         return
+    else
+        -- Try against all games in case key belongs to a different script_id
+        local valid, validScriptId = validateKeyUniversal(script_key)
+        if valid then
+            writefile(key_path, script_key)
+            -- Still load the current game's script
+            API.script_id = currentGame.script_id
+            local recheck = API.check_key(script_key)
+            if recheck.code == "KEY_VALID" then
+                API.load_script()
+                return
+            end
+        end
     end
 end
 
+-- Try saved universal key
 if saved_key ~= "" then
     script_key = saved_key
     local tempStatus = API.check_key(saved_key)
@@ -101,6 +150,17 @@ if saved_key ~= "" then
         API.load_script()
         return
     else
+        -- Try against all games
+        local valid, validScriptId = validateKeyUniversal(saved_key)
+        if valid then
+            API.script_id = currentGame.script_id
+            local recheck = API.check_key(saved_key)
+            if recheck.code == "KEY_VALID" then
+                API.load_script()
+                return
+            end
+        end
+        -- Key invalid everywhere, clean up
         safeDeleteFile(key_path)
         saved_key = ""
         script_key = nil
@@ -120,6 +180,7 @@ local function notify(title, content, duration)
 end
 
 local function checkKey(input_key)
+    -- First try against the current game
     local status = API.check_key(input_key)
 
     if status.code == "KEY_VALID" then
@@ -135,12 +196,15 @@ local function checkKey(input_key)
         notify("Error", "Key locked to another device!", 5)
         return false
 
-    elseif status.code == "KEY_INCORRECT" then
-        notify("Error", "Incorrect key!", 5)
-        return false
-
-    elseif status.code == "KEY_INVALID" then
-        notify("Error", "Invalid or expired key!", 5)
+    elseif status.code == "KEY_INCORRECT" or status.code == "KEY_INVALID" then
+        -- Key didn't work for this game, try all other games
+        local valid, validScriptId = validateKeyUniversal(input_key)
+        if valid then
+            -- Key is valid for another game but not this one
+            notify("Error", "This key is valid but not for " .. currentGame.name .. ".\nIt may belong to a different game's script.", 5)
+        else
+            notify("Error", "Invalid or incorrect key!", 5)
+        end
         return false
 
     else
@@ -162,10 +226,15 @@ local Window = UI:CreateWindow({
 
 local Tab = Window:AddTab({ Title = "Key", Icon = "" })
 
+Tab:AddParagraph({
+    Title = "Universal Key",
+    Content = "One key works for all supported games!"
+})
+
 local Input = Tab:AddInput("KeyInput", {
     Title = "Enter Key",
     Default = "",
-    Placeholder = "Paste your key here",
+    Placeholder = "Paste your universal key here",
     Numeric = false,
     Finished = false
 })
