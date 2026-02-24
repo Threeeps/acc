@@ -40,6 +40,11 @@ local Scripts = {
          script_id = "3d92f8b30257fddaba283735a48c1eb4",
          description = "Ghost"
      },
+   [119091684252491] = {
+         name = "Sorcerer Tycoon",
+         script_id = "c470444ffb23c6e8410bc2fddf0f7f8b",
+         description = "Sorcerer"
+     },
 }
 
 -- Check if game is supported
