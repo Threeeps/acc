@@ -12,42 +12,42 @@ local Linkvertise_Link = "https://ads.luarmor.net/get_key?for=Hina_Hub-PQmcKkkVQ
 local Scripts = {
     [76285745979410] = {
         name = "Anime Card Collection",
-        script_id = "9efd7aeb253b0c53236b2a1f600e7124",
+        script_id = "533a7b5ff518c31c90deee19e00dc65f",
         description = ""
     },
     [130247632398296] = {
         name = "Anime Fighting Simulator Endless",
-        script_id = "a8ab07c9581584c7d03ec6b1f46cc219",
+        script_id = "bc3190f5a441f6847a02e013c023f693",
         description = ""
     },
     [136599248168660] = {
         name = "Solo Hunter",
-        script_id = "c4f01bee2a28f2293728ededb080705c",
+        script_id = "df89341b191202361909846a5df7ca9f",
         description = ""
     },
     [110829983956014] = {
          name = "Anime Card Clash",
-         script_id = "faec2e5ab410523753d5ba96ef3362ed",
+         script_id = "00b5da4170c21e4c9abe2bb8640cb075",
          description = "Anime CARD CLASH"
      },
    [79305036070450] = {
-         name = "Steal a Baddie",
-         script_id = "36c6169a212629563329011d574698a2",
+         name = "Spin A Baddie",
+         script_id = "d744aa314405618de4a30235a8ffd3c7",
          description = "Steal a Baddie"
      },
    [101640913672688] = {
          name = "Anime Ghost",
-         script_id = "3d92f8b30257fddaba283735a48c1eb4",
+         script_id = "954967d0764b1e71c60d10bfe8b7ab32",
          description = "Ghost"
      },
    [119091684252491] = {
          name = "Sorcerer Tycoon",
-         script_id = "c470444ffb23c6e8410bc2fddf0f7f8b",
+         script_id = "f628a8168c30a60ed4841a2ae143d378",
          description = "Sorcerer"
      },
    [79910556932462 ] = {
          name = "Sorcerer Tycoon",
-         script_id = "c470444ffb23c6e8410bc2fddf0f7f8b",
+         script_id = "f628a8168c30a60ed4841a2ae143d378",
          description = "Sorcerer"
      },
 }
