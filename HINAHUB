@@ -20,6 +20,11 @@ local Scripts = {
         script_id = "a8ab07c9581584c7d03ec6b1f46cc219",
         description = ""
     },
+    [73277298613633] = {
+        name = "Anime Fighting Simulator Endless",
+        script_id = "892707091dc21755851ef0116a11d693",
+        description = ""
+    },
     [136599248168660] = {
         name = "Solo Hunter",
         script_id = "c4f01bee2a28f2293728ededb080705c",
