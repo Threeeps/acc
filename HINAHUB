@@ -25,9 +25,9 @@ local Scripts = {
         script_id = "892707091dc21755851ef0116a11d693",
         description = ""
     },
-    [136599248168660] = {
-        name = "Solo Hunter",
-        script_id = "c4f01bee2a28f2293728ededb080705c",
+    [130253630950453] = {
+        name = "Anime Card Battle X ",
+        script_id = "1e1af645f3b86af24fc58e3375b70f81",
         description = ""
     },
     [110829983956014] = {
