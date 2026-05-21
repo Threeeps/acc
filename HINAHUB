@@ -1,1 +1,2 @@
+getgenv().script_key = script_key
 loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/3fbc48366bc8bca91f35b112e568232c.lua"))()
