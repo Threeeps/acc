@@ -35,10 +35,10 @@ local Scripts = {
          script_id = "faec2e5ab410523753d5ba96ef3362ed",
          description = "Anime CARD CLASH"
      },
-   [79305036070450] = {
-         name = "Spin A Baddie",
-         script_id = "36c6169a212629563329011d574698a2",
-         description = "Steal a Baddie"
+   [113236157544232] = {
+         name = "Anime Astral Simulator",
+         script_id = "34603c50d8590f2a7274dd453ceb7659",
+         description = "Anime Astral Simulator"
      },
    [101640913672688] = {
          name = "Anime Ghost",
