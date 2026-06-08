@@ -46,11 +46,6 @@ local Scripts = {
          description = "Ghost"
      },
    [114758508835875] = {
-         name = "Sorcerer Tycoon",
-         script_id = "c470444ffb23c6e8410bc2fddf0f7f8b",
-         description = "Sorcerer"
-     },
-   [79910556932462] = {
          name = "Card Chronicles",
          script_id = "ec2f68590172d3d2be755f9abbbc8898",
          description = "Card Chronicles"
