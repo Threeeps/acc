@@ -45,15 +45,15 @@ local Scripts = {
          script_id = "3d92f8b30257fddaba283735a48c1eb4",
          description = "Ghost"
      },
-   [119091684252491] = {
+   [114758508835875] = {
          name = "Sorcerer Tycoon",
          script_id = "c470444ffb23c6e8410bc2fddf0f7f8b",
          description = "Sorcerer"
      },
    [79910556932462] = {
-         name = "Sorcerer Tycoon",
-         script_id = "c470444ffb23c6e8410bc2fddf0f7f8b",
-         description = "Sorcerer"
+         name = "Card Chronicles",
+         script_id = "ec2f68590172d3d2be755f9abbbc8898",
+         description = "Card Chronicles"
      },
    [90738171169572] = {
          name = "Anime Tactical Simulator",
