@@ -50,10 +50,10 @@ local Scripts = {
          script_id = "ec2f68590172d3d2be755f9abbbc8898",
          description = "Card Chronicles"
      },
-   [90738171169572] = {
-         name = "Anime Tactical Simulator",
-         script_id = "ec2f99d8cb00cd026f2a9579d9c35fba",
-         description = "Tactical"
+   [71132543521245] = {
+         name = "Anime Squadron",
+         script_id = "bb2a6ebcb7d8c9e3952ff164e52a335d",
+         description = "Anime Squadron"
      },
 }
 
