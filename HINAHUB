@@ -8,7 +8,6 @@ local Hub = "Hina Hub"
 local Discord_Invite = "NZHwScVxv3"
 local Linkvertise_Link = "https://ads.luarmor.net/get_key?for=Hina_Hub-PQmcKkkVQYbm"
 
--- Script configurations per game
 -- Script configurations per group (game.CreatorId)
 local Scripts = {
     [9190691] = { name = "Anime Squadron", script_id = "bb2a6ebcb7d8c9e3952ff164e52a335d", description = "Anime Squadron" },
@@ -18,10 +17,11 @@ local Scripts = {
     [34903714] = { name = "Anime Card Clash", script_id = "faec2e5ab410523753d5ba96ef3362ed", description = "Anime CARD CLASH" },
     [35119227] = { name = "Anime Ghost", script_id = "3d92f8b30257fddaba283735a48c1eb4", description = "Ghost" },
     [35338731] = { name = "Card Chronicles", script_id = "ec2f68590172d3d2be755f9abbbc8898", description = "Card Chronicles" },
+    [168519468] = { name = "Anime Astral Simulator", script_id = "34603c50d8590f2a7274dd453ceb7659", description = "Anime Astral Simulator" },
 }
 
--- Check if game is supported
-local currentGame = Scripts[game.PlaceId]
+-- Check if game is supported (by group)
+local currentGame = (game.CreatorType == Enum.CreatorType.Group) and Scripts[game.CreatorId] or nil
 
 if not currentGame then
     game:GetService("StarterGui"):SetCore("SendNotification", {
@@ -63,7 +63,7 @@ end
 
 -- Helper: try validating a key against all game script_ids
 local function validateKeyUniversal(key)
-    for placeId, data in pairs(Scripts) do
+    for groupId, data in pairs(Scripts) do
         local tempAPI = loadstring(game:HttpGet(
             "https://sdkAPI-public.luarmor.net/library.lua"
         ))()
@@ -231,7 +231,7 @@ Tab:AddButton({
     Title = "Join Discord",
     Callback = function()
         setclipboard("https://discord.gg/" .. Discord_Invite)
-        
+
         pcall(function()
             Request({
                 Url = "http://127.0.0.1:6463/rpc?v=1",
@@ -247,7 +247,7 @@ Tab:AddButton({
                 })
             })
         end)
-        
+
         notify("Copied", "Discord link copied!", 5)
     end
 })
@@ -259,7 +259,7 @@ InfoTab:AddParagraph({
     Title = "Supported Games",
     Content = (function()
         local list = ""
-        for placeId, data in pairs(Scripts) do
+        for groupId, data in pairs(Scripts) do
             list = list .. data.name .. " - " .. data.description .. "\n"
         end
         return list
