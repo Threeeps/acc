@@ -1,7 +1,81 @@
-return {
-	"UPD0.75!",
-	"TheHeroHunter!",
-	"SryForLongMaintenance!!",
-	"StrongestChallenger!",
-	"EventChanges",
+local CODES_URL = ""
+local SITE_URL = "https://www.eurogamer.net/anime-squadron-codes"
+
+local RS = game:GetService("ReplicatedStorage")
+local function log(m) print("[SquadronCodes] " .. tostring(m)) end
+
+local function httpGet(url)
+    local req = http_request or request or (syn and syn.request) or (http and http.request)
+    if req then
+        local ok, res = pcall(req, {
+            Url = url, Method = "GET",
+            Headers = { ["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Safari/537.36" },
+        })
+        if ok and type(res) == "table" and type(res.Body) == "string" and #res.Body > 0 then return res.Body end
+    end
+    local ok, body = pcall(function() return game:HttpGet(url) end)
+    if ok and type(body) == "string" then return body end
+    return nil
+end
+
+local function extractCodes(body)
+    local out, seen = {}, {}
+    local function add(tok)
+        if type(tok) ~= "string" then return end
+        tok = tok:gsub("&amp;", "&"):gsub("<[^>]->", ""):gsub("%s+", "")
+        if #tok >= 3 and #tok <= 40 and tok:match("^[%w%.%!%?%-&]+$") and tok:match("[%u%d]") and not seen[tok] then
+            seen[tok] = true
+            out[#out + 1] = tok
+        end
+    end
+    if not body:find("<") then
+        for line in body:gmatch("[^\r\n]+") do add(line) end
+    else
+        for _, tag in ipairs({ "strong", "code" }) do
+            for inner in body:gmatch("<" .. tag .. "[^>]*>(.-)</" .. tag .. ">") do add(inner) end
+        end
+    end
+    return out
+end
+
+local FALLBACK_CODES = {
+    "UPD1.5!", "SETYOURHEARTABLAZE!", "InfinityTrain!", "AdminAbuseSoon!", "SorryForBraluBug!!",
+    "UPD1.0!", "GoBrolyGoGo!", "UltimateFusion!", "MaintenanceTooLongGrrr!", "TheHeroHunter!",
+    "StrongestChallenger!", "EventChanges", "UPD0.75!", "SryForLongMaintenance!!",
 }
+
+local codes, source
+if CODES_URL ~= "" then
+    local b = httpGet(CODES_URL)
+    if b then local got = extractCodes(b); if #got >= 1 then codes, source = got, "your CODES_URL" end end
+end
+if not codes then
+    local b = httpGet(SITE_URL)
+    if b then local got = extractCodes(b); if #got >= 5 then codes, source = got, "eurogamer (live)" end end
+end
+if not codes then codes, source = FALLBACK_CODES, "built-in list" end
+log("Code source: " .. source .. "  (" .. #codes .. " codes)")
+
+local use = RS:FindFirstChild("Remotes") and RS.Remotes:FindFirstChild("Codes") and RS.Remotes.Codes:FindFirstChild("use")
+if not use then
+    warn("[SquadronCodes] Remotes.Codes.use not found. Aborting.")
+    return
+end
+
+log("Redeeming " .. #codes .. " codes...")
+local good, bad = 0, 0
+for i, code in ipairs(codes) do
+    local pok, success, message = pcall(function() return use:InvokeServer(code) end)
+    if pok and success then
+        good = good + 1
+        log(string.format("[%d/%d] REDEEMED  %s", i, #codes, code))
+    elseif pok then
+        bad = bad + 1
+        log(string.format("[%d/%d] skip      %s  ->  %s", i, #codes, code, tostring(message)))
+    else
+        bad = bad + 1
+        log(string.format("[%d/%d] error     %s  ->  %s", i, #codes, code, tostring(success)))
+    end
+    task.wait(0.4)
+end
+log(("Done. %d redeemed, %d failed/already-used out of %d."):format(good, bad, #codes))
