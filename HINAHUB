@@ -23,6 +23,7 @@ local Scripts = {
 	[35119227] = { name = "Anime Ghost", script_id = "3d92f8b30257fddaba283735a48c1eb4" },
 	[35338731] = { name = "Card Chronicles", script_id = "ec2f68590172d3d2be755f9abbbc8898" },
 	[33910482] = { name = "Anime Astral Simulator", script_id = "34603c50d8590f2a7274dd453ceb7659" },
+	[35929511] = { name = "Anime Expedition", script_id = "34603c50d8590f2a7274dd453ceb7659" },
 }
 
 local current = Scripts[game.CreatorId]
