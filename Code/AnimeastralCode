@@ -1,90 +1,112 @@
-return {
-    "RELEASE",
-    "5KPLAYERS",
-    "6KPLAYERS",
-    "6.5KPLAYERS",
-    "500KVISITS",
-    "20KMEMBERS",
-    "EXCHANGE",
-    "SORRYFORSHUTDOWN2",
-    "7KPLAYERS",
-    "10KPLAYERS",
-    "13KPLAYERS",
-    "15KPLAYERS",
-    "NPCNERF",
-    "2.5KLIKES",
-    "5KLIKES",
-    "1MVISITS",
-    "1.5MVISITS",
-    "SORRYFORDELAY",
-    "UPDATE1",
-    "3MVISITS",
-    "3.5MVISITS",
-    "8KLIKES",
-    "4KFAVS",
-    "UPDATE1.5",
-    "3KEVENT",
-    "18KPLAYERS",
-    "19KPLAYERS",
-    "20KPLAYERS",
-    "24KPLAYERS",
-    "25KPLAYERS",
-    "6.5MVISITS",
-    "7MVISITS",
-    "UPDATE2",
-    "BATTLEPASS",
-    "SORRYFORDELAY2",
-    "SORRYFORSHUTDOWN5",
-    "27.5KPLAYERS",
-    "28KPLAYERS",
-    "GO30K",
-    "7.5MVISITS",
-    "8MVISITS",
-    "30KPLAYERS",
-    "SORRYFORSHUTDOWN6",
-    "UPDATE2.5",
-    "9.5MVISITS",
-    "10MVISITS",
-    "MOUNTS",
-    "TRACKER",
-    "SORRYFORDELAY3",
-    "15MVISTS",
-    "GRIMOIRES",
-    "UPDATE3",
-    "WAIFU",
-    "15KLIKES",
-    "20KLIKES",
-    "SORRYFORSHUTDOWN7",
-    "TRIALMEDIUM",
-    "UPDATE3.5",
-    "60KINTERESTED",
-    "17.5MVISITS",
-    "18MVISITS",
-    "SORRYFORSHUTDOWN8",
-    "21.5MVISITS",
-    "22MVISITS",
-    "UPDATE4",
-    "SUMMEREVENT",
-    "SUMMERMOUNT",
-    "18KFAVORITES",
-    "25KLIKES",
-    "UPDATE4.5",
-    "20KFAVORITES",
-    "27MVISITS",
-    "DIVINEPASSIVES",
-    "SORRYFORSHUTDOWN9",
-    "30MVISITS",
-    "MINIUPDATE4.75",
-    "30KLIKES",
-    "45KFAVORITES",
-    "UPDATE5",
-    "50KFAVS",
-    "PETPASSIVES",
-    "DUNGEONS",
-    "MILESTONE40K",
-    "45KHYPE",
-    "35KLIKES",
-    "UPDATE5.5",
-    "40MVISITS",
-    "SKILLTREE",
+local CODES_URL = ""
+local SITE_URL  = "https://www.ign.com/articles/anime-astral-simulator-codes"
+
+local RS = game:GetService("ReplicatedStorage")
+local function log(m) print("[AstralCodes] " .. tostring(m)) end
+
+local function httpGet(url)
+    local req = http_request or request or (syn and syn.request) or (http and http.request)
+    if req then
+        local ok, res = pcall(req, {
+            Url = url, Method = "GET",
+            Headers = { ["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Safari/537.36" },
+        })
+        if ok and type(res) == "table" and type(res.Body) == "string" and #res.Body > 0 then return res.Body end
+    end
+    local ok, body = pcall(function() return game:HttpGet(url) end)
+    if ok and type(body) == "string" then return body end
+    return nil
+end
+
+local function extractCodes(body)
+    local out, seen = {}, {}
+    local function add(tok)
+        if type(tok) ~= "string" then return end
+        tok = tok:gsub("&amp;", "&"):gsub("<[^>]->", ""):gsub("%s+", "")
+        if #tok >= 3 and #tok <= 40 and tok:match("^[%w%.%!%?%-&]+$") and tok:match("[%u%d]") and not seen[tok] then
+            seen[tok] = true
+            out[#out + 1] = tok
+        end
+    end
+    if not body:find("<") then
+        for line in body:gmatch("[^\r\n]+") do add(line) end
+    else
+        for _, tag in ipairs({ "strong", "code" }) do
+            for inner in body:gmatch("<" .. tag .. "[^>]*>(.-)</" .. tag .. ">") do add(inner) end
+        end
+    end
+    return out
+end
+
+local FALLBACK_CODES = {
+    "UPDATE6.2!", "PROMOTION!", "TOMBRAID!", "LIKES5K!", "UPD6.2FIXES!", "FIXEDWHITEBEARDQUEST!",
+    "UPDATE6.1!", "KIEVOLUTION!", "UPDATE6EXTRAFIXES!", "BACKTOASTRAL!", "10KLIKESALREADY!",
+    "5MVISITSINGAME!", "VISITSASTRAL10M!", "10KFAVORITESINTHEGAME!", "ASTRAL20KFAVORITES!",
+    "UPDATE6RELEASE!", "UPDATE6FIXES!", "FIXEDAVATAR!", "SKILLTREE!", "DUNGEONS!", "PETPASSIVES!",
 }
+
+local codes, source
+if CODES_URL ~= "" then
+    local b = httpGet(CODES_URL)
+    if b then local got = extractCodes(b); if #got >= 1 then codes, source = got, "your CODES_URL" end end
+end
+if not codes then
+    local b = httpGet(SITE_URL)
+    if b then local got = extractCodes(b); if #got >= 5 then codes, source = got, "IGN (live)" end end
+end
+if not codes then codes, source = FALLBACK_CODES, "built-in list" end
+log("Code source: " .. source .. "  (" .. #codes .. " codes)")
+
+local okLib, Library = pcall(function() return require(RS.SimpleWorld.Library) end)
+if not okLib or not Library then
+    warn("[AstralCodes] SimpleWorld.Library not found. Aborting.")
+    return
+end
+local RedeemCode, CodeResult
+pcall(function() RedeemCode = Library.getBridge("RedeemCode") end)
+pcall(function() CodeResult = Library.getBridge("CodeResult") end)
+if not RedeemCode or not CodeResult then
+    warn("[AstralCodes] RedeemCode / CodeResult bridge missing. Aborting.")
+    return
+end
+
+local pending
+local conn = CodeResult:Connect(function(ok, msg)
+    if pending and not pending.done then
+        pending.done, pending.ok, pending.msg = true, ok, msg
+    end
+end)
+
+log("Redeeming " .. #codes .. " codes...")
+local good, bad = 0, 0
+for i, code in ipairs(codes) do
+    local settled = false
+    for attempt = 1, 4 do
+        pending = { done = false }
+        pcall(function() RedeemCode:Fire(code) end)
+        local t0 = os.clock()
+        while not pending.done and os.clock() - t0 < 5 do task.wait(0.1) end
+        if pending.done and pending.ok then
+            good = good + 1; settled = true
+            log(string.format("[%d/%d] REDEEMED  %s", i, #codes, code))
+            break
+        elseif pending.done and pending.msg and tostring(pending.msg):lower():find("wait") then
+            task.wait(1.4)
+        elseif pending.done then
+            bad = bad + 1; settled = true
+            log(string.format("[%d/%d] skip      %s  ->  %s", i, #codes, code, tostring(pending.msg)))
+            break
+        else
+            bad = bad + 1; settled = true
+            log(string.format("[%d/%d] timeout   %s", i, #codes, code))
+            break
+        end
+    end
+    if not settled then
+        bad = bad + 1
+        log(string.format("[%d/%d] cooldown  %s  (retries exhausted)", i, #codes, code))
+    end
+    task.wait(1.2)
+end
+conn:Disconnect()
+log(("Done. %d redeemed, %d failed/already-used out of %d."):format(good, bad, #codes))
