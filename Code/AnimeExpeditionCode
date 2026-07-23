@@ -1,1 +1,112 @@
+local CODES = {
+    "HAPPYBDAYCOOP",
+    "1MGROUP!",
+    "100K!",
+    "30KLIKES!",
+    "100mvisits",
+}
 
+local SITE_URL = "https://www.rockpapershotgun.com/roblox-anime-expeditions-codes"
+local DELAY_BETWEEN = 1.2
+
+local RS = game:GetService("ReplicatedStorage")
+local function log(m) print("[ExpeditionCodes] " .. tostring(m)) end
+
+if getgenv().__expCodesRunning then
+    warn("[ExpeditionCodes] Already running. Aborting this run.")
+    return
+end
+getgenv().__expCodesRunning = true
+
+local function finish(msg)
+    getgenv().__expCodesRunning = false
+    if msg then log(msg) end
+end
+
+local setIdentity = setthreadidentity or setidentity or (syn and syn.set_thread_identity)
+local getIdentity = getthreadidentity or getidentity or (syn and syn.get_thread_identity)
+
+local function callGame(fn, ...)
+    local prev
+    if getIdentity then
+        local ok, id = pcall(getIdentity)
+        if ok then prev = id end
+    end
+    if setIdentity then pcall(setIdentity, 2) end
+    local packed = table.pack(pcall(fn, ...))
+    if setIdentity and prev then pcall(setIdentity, prev) end
+    if not packed[1] then return nil end
+    return table.unpack(packed, 2, packed.n)
+end
+
+local function httpGet(url)
+    local req = http_request or request or (syn and syn.request) or (http and http.request)
+    if req then
+        local ok, res = pcall(req, {
+            Url = url, Method = "GET",
+            Headers = { ["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Safari/537.36" },
+        })
+        if ok and type(res) == "table" and type(res.Body) == "string" and #res.Body > 0 then
+            return res.Body
+        end
+    end
+    local ok, body = pcall(function() return game:HttpGet(url) end)
+    if ok and type(body) == "string" then return body end
+    return nil
+end
+
+local BAD = {
+    ["AnimeExpeditionscodes"] = true, ["EXPEDITIONS"] = true, ["RELEASE"] = true,
+    ["Roblox"] = true, ["Codes"] = true, ["CODES"] = true,
+}
+
+local function extractCodes(body, out, seen)
+    local function add(tok)
+        if type(tok) ~= "string" then return end
+        tok = tok:gsub("&amp;", "&"):gsub("&#%d+;", ""):gsub("<[^>]->", ""):gsub("%s+", "")
+        if #tok >= 3 and #tok <= 40
+           and tok:match("^[%w%._%!%?%-&]+$")
+           and tok:match("[%u%d]")
+           and not BAD[tok] and not seen[tok] then
+            seen[tok] = true
+            out[#out + 1] = tok
+        end
+    end
+    for _, tag in ipairs({ "strong", "code", "b" }) do
+        for inner in body:gmatch("<" .. tag .. "[^>]*>(.-)</" .. tag .. ">") do add(inner) end
+    end
+end
+
+local codes, seen = {}, {}
+for _, c in ipairs(CODES) do
+    if not seen[c] then seen[c] = true; codes[#codes + 1] = c end
+end
+local scraped = 0
+if SITE_URL ~= "" then
+    local body = httpGet(SITE_URL)
+    if body then
+        local before = #codes
+        extractCodes(body, codes, seen)
+        scraped = #codes - before
+    end
+end
+log(("%d codes (%d built-in, %d scraped live)"):format(#codes, #CODES, scraped))
+if #codes == 0 then return finish("Nothing to redeem.") end
+
+local Actions
+local ok = pcall(function() Actions = require(RS:WaitForChild("FusionPackage"):WaitForChild("Actions")) end)
+if not ok or type(Actions) ~= "table" or type(Actions.RedeemCode) ~= "function" then
+    return finish("FusionPackage.Actions.RedeemCode not found. Are you in Anime Expeditions?")
+end
+
+log("Redeeming " .. #codes .. " codes...")
+local sent = 0
+for i, code in ipairs(codes) do
+    if not getgenv().__expCodesRunning then break end
+    callGame(function() Actions.RedeemCode(code) end)
+    sent = sent + 1
+    log(("[%d/%d] sent %s"):format(i, #codes, code))
+    task.wait(DELAY_BETWEEN)
+end
+
+finish(("Done. Submitted %d codes. Check your inventory for what actually landed."):format(sent))
