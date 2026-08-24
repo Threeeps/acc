@@ -1,0 +1,151 @@
+-- Anime Origins code redeemer.
+--
+-- Scrapes the current code list from the IGN wiki and redeems everything you do not
+-- already have, then reports what landed. The built-in CODES list below is only a
+-- fallback for when the site cannot be reached.
+
+local CODES = {
+    "100K!",
+    "ChallengesFixed",
+    "GAMESPEED",
+    "TYKaito!",
+    "THANKYOU!",
+    "Origins",
+    "Release!",
+    -- Live on the account but absent from the IGN table, so they would be lost if this
+    -- list were driven by the scrape alone.
+    "AO",
+    "HappyPatch!",
+}
+
+local SITE_URL      = "https://www.ign.com/wikis/anime-origins-roblox/Anime_Origins_Codes_(August_2026)"
+local DELAY_BETWEEN = 1.2
+
+local Players           = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local LocalPlayer       = Players.LocalPlayer
+
+-- SILENT. Nothing is printed on a normal run: this is meant to be fired repeatedly and a
+-- progress line every time just buries the console. Only a hard failure warns, because
+-- that is the one case where silence would be indistinguishable from "it worked".
+if getgenv().__originsCodesRunning then
+    return
+end
+getgenv().__originsCodesRunning = true
+
+local function finish()
+    getgenv().__originsCodesRunning = false
+end
+
+-- Executor HTTP first, falling back to game:HttpGet. IGN serves the wiki fine to a
+-- normal browser User-Agent; without one it can answer with an interstitial instead.
+local function httpGet(url)
+    local req = http_request or request or (syn and syn.request) or (http and http.request)
+    if req then
+        local ok, res = pcall(req, {
+            Url = url,
+            Method = "GET",
+            Headers = {
+                ["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    .. "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Safari/537.36",
+            },
+        })
+        if ok and type(res) == "table" and type(res.Body) == "string" and #res.Body > 0 then
+            return res.Body
+        end
+    end
+    local ok, body = pcall(function() return game:HttpGet(url) end)
+    if ok and type(body) == "string" then return body end
+    return nil
+end
+
+-- IGN IS NOT MARKED UP LIKE THE BLOG SITES.
+--
+-- The usual "<li><strong>CODE</strong>" scrape finds nothing here: the page contains no
+-- <strong> and no <code> tags at all. The codes live in a table, one per row, and the
+-- first cell holds the code followed by the "Copy" button's own label, sometimes behind
+-- a green "NEW!" badge:
+--
+--   <td> <span>NEW!</span> ... 100K! ... Copy ... </td>
+--
+-- So the cell is stripped to plain text, the badge is dropped, and everything before
+-- "Copy" is the code. Rewards live in the second cell and are ignored.
+local function extractCodes(body, out, seen)
+    for tr in body:gmatch("<tr.-</tr>") do
+        local cell = tr:match("<td.-</td>")
+        if cell then
+            local txt = cell:gsub("<[^>]->", " "):gsub("&amp;", "&"):gsub("&#%d+;", "")
+            txt = txt:gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+            txt = txt:gsub("^NEW!%s*", "")
+
+            local code = txt:match("^(.-)%s*Copy") or txt
+            code = code:gsub("%s+", "")
+
+            -- "Code" is the header row. The character class keeps codes like "100K!"
+            -- and "TYKaito!" while rejecting stray prose that shares the cell.
+            if code ~= "" and code:lower() ~= "code"
+                and #code >= 3 and #code <= 40
+                and code:match("^[%w%._%!%?%-&]+$")
+                and not seen[code]
+            then
+                seen[code] = true
+                out[#out + 1] = code
+            end
+        end
+    end
+end
+
+local codes, seen = {}, {}
+if SITE_URL ~= "" then
+    local body = httpGet(SITE_URL)
+    if body then
+        extractCodes(body, codes, seen)
+    end
+end
+-- The built-in list is a fallback, and is also merged in when the scrape worked, so a
+-- code the page has already retired is still attempted rather than silently dropped.
+for _, c in ipairs(CODES) do
+    if not seen[c] then
+        seen[c] = true
+        codes[#codes + 1] = c
+    end
+end
+if #codes == 0 then return finish() end
+
+-- REDEEM WIRE. Anime Origins does not expose a RedeemCode action the way Expeditions
+-- does; it is a RemoteFunction in LobbyRemotes, and it only exists in the LOBBY.
+local LobbyRemotes   = ReplicatedStorage:FindFirstChild("LobbyRemotes")
+local CodesFunction  = LobbyRemotes and LobbyRemotes:FindFirstChild("CodesFunction")
+if not CodesFunction then
+    warn("[OriginsCodes] CodesFunction not found. Run this in the Anime Origins LOBBY, not in a run.")
+    return finish()
+end
+
+-- Already-redeemed codes are on the player's own data, so they can be skipped instead of
+-- being sent and refused, which is what keeps a repeat run instant instead of sitting
+-- through a wait per code.
+--
+-- RedeemedCodes IS AN ARRAY OF STRINGS, not a set keyed by the code:
+--   { [1] = "Release!", [2] = "AO", [3] = "Origins", ... }
+-- so indexing it by the code is always nil and nothing is ever skipped. It has to be
+-- turned into a lookup first.
+local redeemed = {}
+pcall(function()
+    local GlobalTables = require(ReplicatedStorage.Modules.GlobalTables)
+    local list = (GlobalTables.PlayerData and GlobalTables.PlayerData.RedeemedCodes) or {}
+    for _, c in pairs(list) do
+        if type(c) == "string" then redeemed[c] = true end
+    end
+end)
+
+for _, code in ipairs(codes) do
+    -- Re-checked each pass so the flag can be cleared to stop a run part way through.
+    if not getgenv().__originsCodesRunning then break end
+
+    if not redeemed[code] then
+        pcall(function() CodesFunction:InvokeServer("RedeemCode", code) end)
+        task.wait(DELAY_BETWEEN)
+    end
+end
+
+finish()
