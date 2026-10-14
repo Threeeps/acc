@@ -27,6 +27,7 @@ local Scripts = {
 	[111457579] = { name = "Anime Origins", script_id = "b4087358bc2a66fc4e080c70494654cc" },
     [33017480] = { name = "Anime Dice", script_id = "a91386670e245d1151f26ff4d4dd2100" },
     [10611639] = { name = "Anime Adventures", script_id = "a4749bc80faa19f486e2e50cf1b3ad79" },
+    [861404864] = { name = "Anime Zero", script_id = "fae59dabfc6b436e5b33f814cab38d3a" },
 }
 
 local current = Scripts[game.CreatorId]
