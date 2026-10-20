@@ -3,9 +3,6 @@ if not game:IsLoaded() then
 end
 task.wait(math.random())
 
-if getgenv().HinaHub_Executed then return end
-getgenv().HinaHub_Executed = true
-
 local Hub = "Hina Hub"
 local Discord_Invite = "hinahub"
 local Key_Link = "https://ads.luarmor.net/get_key?for=Hina_Hub-PQmcKkkVQYbm"
@@ -25,22 +22,31 @@ local Scripts = {
 	[33910482] = { name = "Anime Astral Simulator", script_id = "34603c50d8590f2a7274dd453ceb7659" },
 	[35929511] = { name = "Anime Expedition", script_id = "be08aef12663749994f856523cf89f07" },
 	[111457579] = { name = "Anime Origins", script_id = "b4087358bc2a66fc4e080c70494654cc" },
-    [33017480] = { name = "Anime Dice", script_id = "a91386670e245d1151f26ff4d4dd2100" },
-    [10611639] = { name = "Anime Adventures", script_id = "a4749bc80faa19f486e2e50cf1b3ad79" },
-    [861404864] = { name = "Anime Zero", script_id = "fae59dabfc6b436e5b33f814cab38d3a" },
+	[33017480] = { name = "Anime Dice", script_id = "a91386670e245d1151f26ff4d4dd2100" },
+	[10611639] = { name = "Anime Adventures", script_id = "a4749bc80faa19f486e2e50cf1b3ad79" },
+	[861404864] = { name = "Anime Zero", script_id = "fae59dabfc6b436e5b33f814cab38d3a" },
 }
+
+local function notify(text)
+	pcall(function()
+		game:GetService("StarterGui"):SetCore("SendNotification", { Title = Hub, Text = text, Duration = 5 })
+	end)
+end
 
 local current = Scripts[game.CreatorId]
 if not current then
-	pcall(function()
-		game:GetService("StarterGui"):SetCore("SendNotification", {
-			Title = Hub, Text = "This game is not supported!", Duration = 5
-		})
-	end)
+	notify("This game is not supported!")
 	return
 end
 
-getgenv().HinaHub = {
+-- Skip only a duplicate run started within a few seconds (auto execute + the executor's autoexec
+-- folder firing together). The old "true forever" flag blocked every later run, manual re-executes
+-- included, after one failed attempt.
+local G = getgenv()
+if G.HinaHub_Executed and os.clock() - G.HinaHub_Executed < 20 then return end
+G.HinaHub_Executed = os.clock()
+
+G.HinaHub = {
 	hub = Hub,
 	discord = Discord_Invite,
 	keyLink = Key_Link,
@@ -50,4 +56,18 @@ getgenv().HinaHub = {
 	script_id = current.script_id,
 }
 
-loadstring(game:HttpGet(UI_LOADER))()
+-- A failed download or key system error clears the flag so the next run is not blocked.
+local ok, err = pcall(function()
+	local src
+	for i = 1, 3 do
+		local got, body = pcall(game.HttpGet, game, UI_LOADER)
+		if got and type(body) == "string" and #body > 0 then src = body break end
+		task.wait(i)
+	end
+	assert(src, "could not download the key system")
+	assert(loadstring(src))()
+end)
+if not ok then
+	G.HinaHub_Executed = nil
+	notify("Failed to load, run the script again. (" .. tostring(err) .. ")")
+end
