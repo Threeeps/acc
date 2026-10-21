@@ -57,16 +57,24 @@ G.HinaHub = {
 }
 
 -- A failed download or key system error clears the flag so the next run is not blocked.
-local ok, err = pcall(function()
-	local src
-	for i = 1, 3 do
-		local got, body = pcall(game.HttpGet, game, UI_LOADER)
-		if got and type(body) == "string" and #body > 0 then src = body break end
-		task.wait(i)
-	end
-	assert(src, "could not download the key system")
-	assert(loadstring(src))()
-end)
+-- Errors inside the obfuscated key system / Luarmor loader (e.g. "Luraph Script:61: ...
+-- attempt to perform arithmetic (mul)", seen on mobile) are usually a bad download: retry
+-- the whole chain twice with a fresh download before telling the player.
+local ok, err
+for attempt = 1, 3 do
+	ok, err = pcall(function()
+		local src
+		for i = 1, 3 do
+			local got, body = pcall(game.HttpGet, game, UI_LOADER)
+			if got and type(body) == "string" and #body > 0 then src = body break end
+			task.wait(i)
+		end
+		assert(src, "could not download the key system")
+		assert(loadstring(src))()
+	end)
+	if ok then break end
+	task.wait(attempt * 3)
+end
 if not ok then
 	G.HinaHub_Executed = nil
 	notify("Failed to load, run the script again. (" .. tostring(err) .. ")")
