@@ -1,148 +1,216 @@
+-- Hina Hub - Hide Name
+-- Fakes your name, display name and user id in every text on screen,
+-- and disguises your character as the FakeId avatar (client side only).
+
 if not getgenv().Config then
     getgenv().Config = {
-    Headless = false,
-    
-    FakeDisplayName = "Hina Hub",
-    FakeName = "Hina Hub",
-    FakeId = 111111,
-}
+        Headless = false,
+        FakeDisplayName = "Hina Hub",
+        FakeName = "Hina Hub",
+        FakeId = 111111,
+    }
+end
+local Config = getgenv().Config
+
+-- running it twice would stack every connection below
+if getgenv().__hinaHideNameLoaded then
+    return
+end
+getgenv().__hinaHideNameLoaded = true
+
+local Players = game:GetService("Players")
+local lp = Players.LocalPlayer
+
+local function isClothing(v)
+    return v:IsA("ShirtGraphic") or v:IsA("Shirt") or v:IsA("Pants") or v:IsA("BodyColors")
 end
 
-local players = game:GetService('Players')
-
-function disguisechar(char, id)
-	task.spawn(function()
-        print('called')
-		if not char then
-			return
-		end
-		local hum = char:FindFirstChildOfClass('Humanoid')
-		char:WaitForChild("Head")
-		local desc
-		if desc == nil then
-			local suc = false
-			repeat
-				suc = pcall(function()
-					desc = players:GetHumanoidDescriptionFromUserId(id)
-				end)
-				task.wait(1)
-			until suc
-		end
-		desc.HeightScale = hum:WaitForChild("HumanoidDescription").HeightScale
-		char.Archivable = true
-		local disguiseclone = char:Clone()
-		disguiseclone.Name = "disguisechar"
-		disguiseclone.Parent = workspace
-		for i, v in pairs(disguiseclone:GetChildren()) do
-			if v:IsA("Accessory") or v:IsA("ShirtGraphic") or v:IsA("Shirt") or v:IsA("Pants") then
-				v:Destroy()
-			end
-		end
-		disguiseclone.Humanoid:ApplyDescriptionClientServer(desc)
-		for i, v in pairs(char:GetChildren()) do
-			if (v:IsA("Accessory") and v:GetAttribute("InvItem") == nil and v:GetAttribute("ArmorSlot") == nil) or v:IsA("ShirtGraphic") or v:IsA("Shirt") or v:IsA("Pants") or v:IsA("BodyColors") then
-				v.Parent = game
-			end
-		end
-		char.ChildAdded:Connect(function(v)
-			if ((v:IsA("Accessory") and v:GetAttribute("InvItem") == nil and v:GetAttribute("ArmorSlot") == nil) or v:IsA("ShirtGraphic") or v:IsA("Shirt") or v:IsA("Pants") or v:IsA("BodyColors")) and v:GetAttribute("Disguise") == nil then
-				repeat
-					task.wait()
-					v.Parent = game
-				until v.Parent == game
-			end
-		end)
-		for i, v in pairs(disguiseclone:WaitForChild("Animate"):GetChildren()) do
-			v:SetAttribute("Disguise", true)
-			local real = char.Animate:FindFirstChild(v.Name)
-			if v:IsA("StringValue") and real then
-				real.Parent = game
-				v.Parent = char.Animate
-			end
-		end
-		for i, v in pairs(disguiseclone:GetChildren()) do
-			v:SetAttribute("Disguise", true)
-			if v:IsA("Accessory") then
-				for i2, v2 in pairs(v:GetDescendants()) do
-					if v2:IsA("Weld") and v2.Part1 then
-						v2.Part1 = char[v2.Part1.Name]
-					end
-				end
-				v.Parent = char
-			elseif v:IsA("ShirtGraphic") or v:IsA("Shirt") or v:IsA("Pants") or v:IsA("BodyColors") then
-				v.Parent = char
-			elseif v.Name == "Head" and v:FindFirstChildOfClass('SpecialMesh') then
-				char.Head:FindFirstChildOfClass('SpecialMesh').MeshId = v:FindFirstChildOfClass('SpecialMesh').MeshId
-			end
-		end
-		local localface = char:FindFirstChild("face", true)
-		local cloneface = disguiseclone:FindFirstChild("face", true)
-		if localface and cloneface then
-			localface.Parent = game
-			cloneface.Parent = char.Head
-		end
-		char.Humanoid.HumanoidDescription:SetEmotes(desc:GetEmotes())
-		char.Humanoid.HumanoidDescription:SetEquippedEmotes(desc:GetEquippedEmotes())
-		disguiseclone:Destroy()
-	end)
+local function isOwnAccessory(v)
+    -- InvItem / ArmorSlot accessories belong to the game (weapons, armor), keep them
+    return v:IsA("Accessory") and v:GetAttribute("InvItem") == nil and v:GetAttribute("ArmorSlot") == nil
 end
 
-lp = game:GetService("Players").LocalPlayer
-oldUserId = tostring(lp.UserId)
-oldName = lp.Name
-oldDisplayName = lp.DisplayName
-local function processtext(text)
-    if string.gsub(text,oldName,Config.FakeName) ~= text then
-        return string.gsub(text,oldName,Config.FakeName)
-    elseif string.gsub(text,oldUserId,Config.FakeId) ~= text then
-        return string.gsub(text,oldUserId,Config.FakeId)
-    elseif string.gsub(text,oldDisplayName,Config.FakeDisplayName) ~= text then
-        return string.gsub(text,oldDisplayName,Config.FakeDisplayName)
+local function disguise(char, id)
+    if not char then
+        return
     end
-    if text ~= nil then
-        return text
+    local hum = char:WaitForChild("Humanoid", 10)
+    local head = char:WaitForChild("Head", 10)
+    if not hum or not head then
+        return
     end
-    return ''
-end
-for i,v in next, game:GetDescendants() do
-    if v:IsA("TextBox") or v:IsA("TextLabel") or v:IsA("TextButton") then
-        v.Text = processtext(v.Text)
-        v.Name = processtext(v.Name)
-        v.Changed:Connect(function(property)
-            v.Text = processtext(v.Text)
-            v.Name = processtext(v.Name)
+
+    local desc
+    for _ = 1, 10 do
+        local ok, result = pcall(function()
+            return Players:GetHumanoidDescriptionFromUserId(id)
         end)
+        if ok and result then
+            desc = result
+            break
+        end
+        task.wait(1)
     end
-end
-game.DescendantAdded:Connect(function(descendant)
-    if descendant:IsA("TextBox") or descendant:IsA("TextLabel") or descendant:IsA("TextButton") then
-        descendant.Text = processtext(descendant.Text)
-        descendant.Name = processtext(descendant.Name)
-        descendant.Changed:Connect(function()
-            descendant.Text = processtext(descendant.Text)
-            descendant.Name = processtext(descendant.Name)
-        end)
+    if not desc then
+        warn("[Hina] Hide Name: could not get avatar for id " .. tostring(id))
+        return
     end
-end)
-lp.DisplayName = Config.FakeDisplayName
-lp.CharacterAppearanceId = Config.FakeId
+    local realDesc = hum:FindFirstChildOfClass("HumanoidDescription")
+    if realDesc then
+        desc.HeightScale = realDesc.HeightScale
+    end
 
-if Config.Headless == true then
-    task.spawn(function()
-   while wait() do
-        local char = lp.Character or lp.CharacterAdded:wait()
-        char:WaitForChild("Head").Transparency = 1
-        if char:WaitForChild("Head"):FindFirstChildOfClass("Decal") then
-            char.Head:FindFirstChildOfClass("Decal"):Destroy()
+    -- build the fake look on a clone, then move its parts onto the real character
+    char.Archivable = true
+    local clone = char:Clone()
+    clone.Name = "disguisechar"
+    clone.Parent = workspace
+    for _, v in ipairs(clone:GetChildren()) do
+        if v:IsA("Accessory") or isClothing(v) then
+            v:Destroy()
         end
     end
+    -- ApplyDescriptionClientServer was removed by Roblox; ApplyDescription works on a local clone
+    clone.Humanoid:ApplyDescription(desc)
+
+    for _, v in ipairs(char:GetChildren()) do
+        if isOwnAccessory(v) or isClothing(v) then
+            v.Parent = game
+        end
+    end
+    char.ChildAdded:Connect(function(v)
+        if (isOwnAccessory(v) or isClothing(v)) and v:GetAttribute("Disguise") == nil then
+            repeat
+                task.wait()
+                v.Parent = game
+            until v.Parent == game
+        end
+    end)
+
+    local cloneAnimate = clone:FindFirstChild("Animate")
+    local realAnimate = char:FindFirstChild("Animate")
+    if cloneAnimate and realAnimate then
+        for _, v in ipairs(cloneAnimate:GetChildren()) do
+            v:SetAttribute("Disguise", true)
+            local real = realAnimate:FindFirstChild(v.Name)
+            if v:IsA("StringValue") and real then
+                real.Parent = game
+                v.Parent = realAnimate
+            end
+        end
+    end
+
+    for _, v in ipairs(clone:GetChildren()) do
+        v:SetAttribute("Disguise", true)
+        if v:IsA("Accessory") then
+            for _, w in ipairs(v:GetDescendants()) do
+                if w:IsA("Weld") and w.Part1 then
+                    local part = char:FindFirstChild(w.Part1.Name)
+                    if part then
+                        w.Part1 = part
+                    end
+                end
+            end
+            v.Parent = char
+        elseif isClothing(v) then
+            v.Parent = char
+        elseif v.Name == "Head" then
+            local fakeMesh = v:FindFirstChildOfClass("SpecialMesh")
+            local realMesh = head:FindFirstChildOfClass("SpecialMesh")
+            if fakeMesh and realMesh then
+                realMesh.MeshId = fakeMesh.MeshId
+            end
+        end
+    end
+
+    local realFace = char:FindFirstChild("face", true)
+    local fakeFace = clone:FindFirstChild("face", true)
+    if realFace and fakeFace then
+        realFace.Parent = game
+        fakeFace.Parent = head
+    end
+
+    if realDesc then
+        pcall(function()
+            realDesc:SetEmotes(desc:GetEmotes())
+            realDesc:SetEquippedEmotes(desc:GetEquippedEmotes())
+        end)
+    end
+    clone:Destroy()
+end
+
+local function disguiseSafe(char)
+    task.spawn(function()
+        local ok, err = pcall(disguise, char, Config.FakeId)
+        if not ok then
+            warn("[Hina] Hide Name disguise failed: " .. tostring(err))
+        end
     end)
 end
 
-pcall(function()
-   disguisechar(lp.Character,getgenv().Config.FakeId)
-end)
+-- text replacement
+local oldUserId = tostring(lp.UserId)
+local oldName = lp.Name
+local oldDisplayName = lp.DisplayName
 
-lp.CharacterAdded:Connect(function()
-      disguisechar(lp.Character,getgenv().Config.FakeId)
-end)
+local function escape(s)
+    return (s:gsub("%p", "%%%0"))
+end
+
+local function processText(text)
+    if type(text) ~= "string" then
+        return ""
+    end
+    -- %% in a replacement string is a literal %
+    text = text:gsub(escape(oldName), (tostring(Config.FakeName):gsub("%%", "%%%%")))
+    text = text:gsub(escape(oldDisplayName), (tostring(Config.FakeDisplayName):gsub("%%", "%%%%")))
+    text = text:gsub(escape(oldUserId), (tostring(Config.FakeId):gsub("%%", "%%%%")))
+    return text
+end
+
+local function hookText(v)
+    if not (v:IsA("TextBox") or v:IsA("TextLabel") or v:IsA("TextButton")) then
+        return
+    end
+    local function fix()
+        local newText, newName = processText(v.Text), processText(v.Name)
+        -- only write on change, so Changed does not fire forever
+        if v.Text ~= newText then v.Text = newText end
+        if v.Name ~= newName then v.Name = newName end
+    end
+    pcall(fix)
+    v.Changed:Connect(function(prop)
+        if prop == "Text" or prop == "Name" then
+            pcall(fix)
+        end
+    end)
+end
+
+for _, v in ipairs(game:GetDescendants()) do
+    hookText(v)
+end
+game.DescendantAdded:Connect(hookText)
+
+pcall(function() lp.DisplayName = Config.FakeDisplayName end)
+pcall(function() lp.CharacterAppearanceId = Config.FakeId end)
+
+if Config.Headless == true then
+    task.spawn(function()
+        while task.wait(0.5) do
+            local char = lp.Character
+            local head = char and char:FindFirstChild("Head")
+            if head then
+                head.Transparency = 1
+                local decal = head:FindFirstChildOfClass("Decal")
+                if decal then
+                    decal:Destroy()
+                end
+            end
+        end
+    end)
+end
+
+if lp.Character then
+    disguiseSafe(lp.Character)
+end
+lp.CharacterAdded:Connect(disguiseSafe)
