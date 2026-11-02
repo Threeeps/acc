@@ -1,0 +1,224 @@
+{
+ "SHBuffs": [
+  [
+   "Double Attack",
+   "x2 damage"
+  ],
+  [
+   "Attack",
+   "+12% attack"
+  ],
+  [
+   "Boss Damage",
+   "+35% boss damage"
+  ],
+  [
+   "Cooldown",
+   "-5% cooldown"
+  ],
+  [
+   "Active Cooldown",
+   "-20% active cooldown"
+  ],
+  [
+   "Double Attack, Double Cooldown",
+   "x2 damage, x2 cooldown"
+  ],
+  [
+   "Range",
+   "+15% range"
+  ],
+  [
+   "Double Range",
+   "x2 range"
+  ],
+  [
+   "Double Attack, Half Range",
+   "x2 damage, half range"
+  ],
+  [
+   "Gain 2 Random Effects",
+   "two random cards"
+  ],
+  [
+   "Random Blessings",
+   "2 random tier 1 blessings"
+  ],
+  [
+   "Yen",
+   "+3,000 yen"
+  ]
+ ],
+ "SHCurses": [
+  [
+   "Enemy Regen",
+   "+0.5% enemy regen"
+  ],
+  [
+   "Enemy Shield",
+   "+3 enemy shield"
+  ],
+  [
+   "Plated",
+   "+75 enemy physical resist"
+  ],
+  [
+   "Spellproof Enemies",
+   "+75 enemy magic resist"
+  ],
+  [
+   "Resistant",
+   "+50 enemy physical and magic resist"
+  ],
+  [
+   "Enemy Health",
+   "+50% enemy health"
+  ],
+  [
+   "Random Curses",
+   "2 random tier 1 curses, +25% secret drop"
+  ],
+  [
+   "New Path",
+   "an extra enemy path"
+  ],
+  [
+   "Explosive Deaths",
+   "+6 explosive deaths range"
+  ],
+  [
+   "Enemy Speed",
+   "+25% enemy speed"
+  ]
+ ],
+ "SHWeatherCards": [
+  [
+   "Cosmic Rays",
+   "Starfall: +15% Cooldown, +50% pearls"
+  ],
+  [
+   "Doomsday",
+   "Starfall: +100% Secret Drop Rate, +100% Enemy Health, +100% pearls"
+  ],
+  [
+   "Stardust",
+   "Starfall: +6000 ¥"
+  ],
+  [
+   "Starforged",
+   "Starfall: +50% Secret Drop Rate, +50% Enemy Health, +50% pearls"
+  ],
+  [
+   "Wishing Star",
+   "Starfall: +100% Star Golem Chance"
+  ],
+  [
+   "Bonfire",
+   "Blizzard: +75% Fire Damage Taken"
+  ],
+  [
+   "Frostbite",
+   "Blizzard: -30% Enemy Speed"
+  ],
+  [
+   "Hailstorm",
+   "Blizzard: +50% Enemy Health, +50% pearls"
+  ],
+  [
+   "Ice Breaker",
+   "Blizzard: +50% Boss Damage"
+  ],
+  [
+   "Permafrost",
+   "Blizzard: +3 Enemy Shield, +50% pearls"
+  ],
+  [
+   "Whiteout",
+   "Blizzard: +50% Enemy Health, -15% Range, +100% pearls"
+  ],
+  [
+   "Low Tide",
+   "Flooded: -25% Enemy Speed"
+  ],
+  [
+   "Rising Tide",
+   "Flooded: +50% Enemy Health, +50% pearls"
+  ],
+  [
+   "Salvage",
+   "Flooded: +6000 ¥"
+  ],
+  [
+   "Tidal Surge",
+   "Flooded: +50% Burst Enemy Speed, +50% pearls"
+  ],
+  [
+   "Tsunami",
+   "Flooded: +50% Enemy Speed, +50% Enemy Health, +100% pearls"
+  ],
+  [
+   "Buried Treasure",
+   "Sandstorm: +6000 ¥"
+  ],
+  [
+   "Clear Skies",
+   "Sandstorm: -55 Enemy Magic Resist"
+  ],
+  [
+   "Dust Devil",
+   "Sandstorm: +40 Enemy Magic Resist, +50% pearls"
+  ],
+  [
+   "Haboob",
+   "Sandstorm: +75 Enemy Magic Resist, +50% Enemy Health, +100% pearls"
+  ],
+  [
+   "Sand Armor",
+   "Sandstorm: +3 Enemy Shield, +50% pearls"
+  ],
+  [
+   "Sandblast",
+   "Sandstorm: +40% Physical Damage Taken"
+  ],
+  [
+   "Arcane Storm",
+   "Magical: +150 Enemy Physical Resist, +50% Enemy Health, +100% pearls"
+  ],
+  [
+   "Arcane Ward",
+   "Magical: +75 Enemy Physical Resist, +50% pearls"
+  ],
+  [
+   "Dispel",
+   "Magical: -110 Enemy Physical Resist"
+  ],
+  [
+   "Leyline",
+   "Magical: -15% Cooldown"
+  ],
+  [
+   "Mana Shield",
+   "Magical: +3 Enemy Shield, +50% pearls"
+  ],
+  [
+   "Mana Surge",
+   "Magical: +40% Magic Damage Taken"
+  ]
+ ],
+ "SHWeatherCards_default": [
+  "Wishing Star",
+  "Stardust",
+  "Salvage",
+  "Buried Treasure",
+  "Frostbite",
+  "Low Tide",
+  "Ice Breaker",
+  "Dispel",
+  "Clear Skies",
+  "Leyline",
+  "Sandblast",
+  "Mana Surge",
+  "Bonfire"
+ ],
+ "updated": "2026-11-02"
+}
