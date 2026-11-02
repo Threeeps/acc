@@ -1,116 +1,104 @@
 {
  "SHBuffs": [
   [
-   "Double Attack",
-   "x2 damage"
+   "Active Cooldown",
+   "-20% Active Cooldown"
   ],
   [
    "Attack",
-   "+12% attack"
+   "+12% Attack"
   ],
   [
    "Boss Damage",
-   "+35% boss damage"
+   "+35% Boss Damage"
   ],
   [
    "Cooldown",
-   "-5% cooldown"
+   "-5% Cooldown"
   ],
   [
-   "Active Cooldown",
-   "-20% active cooldown"
+   "Double Attack",
+   "Doubles Attack"
   ],
   [
    "Double Attack, Double Cooldown",
-   "x2 damage, x2 cooldown"
-  ],
-  [
-   "Range",
-   "+15% range"
-  ],
-  [
-   "Double Range",
-   "x2 range"
+   "Doubles Attack, Doubles Cooldown"
   ],
   [
    "Double Attack, Half Range",
-   "x2 damage, half range"
+   "Doubles Attack, Halves Range"
   ],
   [
-   "Gain 2 Random Effects",
-   "two random cards"
+   "Double Range",
+   "Doubles Range"
   ],
   [
    "Random Blessings",
-   "2 random tier 1 blessings"
+   "Gain 2 Random Tier 1 Blessings"
+  ],
+  [
+   "Range",
+   "+15% Range"
   ],
   [
    "Yen",
-   "+3,000 yen"
+   "+3000 ¥"
   ]
  ],
  "SHCurses": [
   [
+   "Enemy Health",
+   "+50% Enemy Health"
+  ],
+  [
    "Enemy Regen",
-   "+0.5% enemy regen"
+   "+0.5% Enemy Regen"
   ],
   [
    "Enemy Shield",
-   "+3 enemy shield"
-  ],
-  [
-   "Plated",
-   "+75 enemy physical resist"
-  ],
-  [
-   "Spellproof Enemies",
-   "+75 enemy magic resist"
-  ],
-  [
-   "Resistant",
-   "+50 enemy physical and magic resist"
-  ],
-  [
-   "Enemy Health",
-   "+50% enemy health"
-  ],
-  [
-   "Random Curses",
-   "2 random tier 1 curses, +25% secret drop"
-  ],
-  [
-   "New Path",
-   "an extra enemy path"
-  ],
-  [
-   "Explosive Deaths",
-   "+6 explosive deaths range"
+   "+3 Enemy Shield"
   ],
   [
    "Enemy Speed",
-   "+25% enemy speed"
+   "+25% Enemy Speed"
+  ],
+  [
+   "Explosive Deaths",
+   "+6 Explosive Deaths Range"
+  ],
+  [
+   "Plated Enemies",
+   "+75 Enemy Physical Resist"
+  ],
+  [
+   "Random Curses",
+   "Gain 2 Random Tier 1 Curses, +25% Secret Drop Rate"
+  ],
+  [
+   "Resistant Enemies",
+   "+50 Enemy Physical Resist, +50 Enemy Magic Resist"
+  ],
+  [
+   "Spellproof Enemies",
+   "+75 Enemy Magic Resist"
   ]
  ],
  "SHWeatherCards": [
   [
-   "Cosmic Rays",
-   "Starfall: +15% Cooldown, +50% pearls"
+   "Permafrost",
+   "Blizzard: +3 Enemy Shield, +50% pearls"
   ],
   [
-   "Doomsday",
-   "Starfall: +100% Secret Drop Rate, +100% Enemy Health, +100% pearls"
+   "Ice Breaker",
+   "Blizzard: +50% Boss Damage"
   ],
   [
-   "Stardust",
-   "Starfall: +6000 ¥"
+   "Hailstorm",
+   "Blizzard: +50% Enemy Health, +50% pearls"
   ],
   [
-   "Starforged",
-   "Starfall: +50% Secret Drop Rate, +50% Enemy Health, +50% pearls"
-  ],
-  [
-   "Wishing Star",
-   "Starfall: +100% Star Golem Chance"
+   "Whiteout",
+   "Blizzard: +50% Enemy Health, -15% Range, +100% pearls"
   ],
   [
    "Bonfire",
@@ -121,68 +109,36 @@
    "Blizzard: -30% Enemy Speed"
   ],
   [
-   "Hailstorm",
-   "Blizzard: +50% Enemy Health, +50% pearls"
-  ],
-  [
-   "Ice Breaker",
-   "Blizzard: +50% Boss Damage"
-  ],
-  [
-   "Permafrost",
-   "Blizzard: +3 Enemy Shield, +50% pearls"
-  ],
-  [
-   "Whiteout",
-   "Blizzard: +50% Enemy Health, -15% Range, +100% pearls"
-  ],
-  [
-   "Low Tide",
-   "Flooded: -25% Enemy Speed"
+   "Tidal Surge",
+   "Flooded: +50% Burst Enemy Speed, +50% pearls"
   ],
   [
    "Rising Tide",
    "Flooded: +50% Enemy Health, +50% pearls"
   ],
   [
-   "Salvage",
-   "Flooded: +6000 ¥"
-  ],
-  [
-   "Tidal Surge",
-   "Flooded: +50% Burst Enemy Speed, +50% pearls"
-  ],
-  [
    "Tsunami",
    "Flooded: +50% Enemy Speed, +50% Enemy Health, +100% pearls"
   ],
   [
-   "Buried Treasure",
-   "Sandstorm: +6000 ¥"
+   "Salvage",
+   "Flooded: +6000 ¥"
   ],
   [
-   "Clear Skies",
-   "Sandstorm: -55 Enemy Magic Resist"
-  ],
-  [
-   "Dust Devil",
-   "Sandstorm: +40 Enemy Magic Resist, +50% pearls"
-  ],
-  [
-   "Haboob",
-   "Sandstorm: +75 Enemy Magic Resist, +50% Enemy Health, +100% pearls"
-  ],
-  [
-   "Sand Armor",
-   "Sandstorm: +3 Enemy Shield, +50% pearls"
-  ],
-  [
-   "Sandblast",
-   "Sandstorm: +40% Physical Damage Taken"
+   "Low Tide",
+   "Flooded: -25% Enemy Speed"
   ],
   [
    "Arcane Storm",
    "Magical: +150 Enemy Physical Resist, +50% Enemy Health, +100% pearls"
+  ],
+  [
+   "Mana Shield",
+   "Magical: +3 Enemy Shield, +50% pearls"
+  ],
+  [
+   "Mana Surge",
+   "Magical: +40% Magic Damage Taken"
   ],
   [
    "Arcane Ward",
@@ -197,12 +153,48 @@
    "Magical: -15% Cooldown"
   ],
   [
-   "Mana Shield",
-   "Magical: +3 Enemy Shield, +50% pearls"
+   "Sand Armor",
+   "Sandstorm: +3 Enemy Shield, +50% pearls"
   ],
   [
-   "Mana Surge",
-   "Magical: +40% Magic Damage Taken"
+   "Dust Devil",
+   "Sandstorm: +40 Enemy Magic Resist, +50% pearls"
+  ],
+  [
+   "Sandblast",
+   "Sandstorm: +40% Physical Damage Taken"
+  ],
+  [
+   "Buried Treasure",
+   "Sandstorm: +6000 ¥"
+  ],
+  [
+   "Haboob",
+   "Sandstorm: +75 Enemy Magic Resist, +50% Enemy Health, +100% pearls"
+  ],
+  [
+   "Clear Skies",
+   "Sandstorm: -55 Enemy Magic Resist"
+  ],
+  [
+   "Doomsday",
+   "Starfall: +100% Secret Drop Rate, +100% Enemy Health, +100% pearls"
+  ],
+  [
+   "Wishing Star",
+   "Starfall: +100% Star Golem Chance"
+  ],
+  [
+   "Cosmic Rays",
+   "Starfall: +15% Cooldown, +50% pearls"
+  ],
+  [
+   "Starforged",
+   "Starfall: +50% Secret Drop Rate, +50% Enemy Health, +50% pearls"
+  ],
+  [
+   "Stardust",
+   "Starfall: +6000 ¥"
   ]
  ],
  "SHWeatherCards_default": [
