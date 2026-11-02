@@ -33,6 +33,10 @@
    "Doubles Range"
   ],
   [
+   "Leyline",
+   "-15% Cooldown, MagHina Hub Card"
+  ],
+  [
    "Random Blessings",
    "Gain 2 Random Tier 1 Blessings"
   ],
@@ -129,6 +133,26 @@
    "Flooded: -25% Enemy Speed"
   ],
   [
+   "Scorch",
+   "Inferno: +15% Cooldown, +50% pearls"
+  ],
+  [
+   "Heatwave",
+   "Inferno: +25% Enemy Speed, +50% pearls"
+  ],
+  [
+   "Cinders",
+   "Inferno: +50% Boss Damage"
+  ],
+  [
+   "Phoenix",
+   "Inferno: +50% Enemy Health, +25% Enemy Speed, +100% pearls"
+  ],
+  [
+   "Firebreak",
+   "Inferno: -30% Enemy Speed"
+  ],
+  [
    "Arcane Storm",
    "Magical: +150 Enemy Physical Resist, +50% Enemy Health, +100% pearls"
   ],
@@ -151,6 +175,26 @@
   [
    "Leyline",
    "Magical: -15% Cooldown"
+  ],
+  [
+   "Flash Flood",
+   "Rainy: +25% Enemy Speed, +50% pearls"
+  ],
+  [
+   "Washout",
+   "Rainy: +50% Enemy Health, +50% pearls"
+  ],
+  [
+   "Torrent",
+   "Rainy: +50% Enemy Speed, +50% Enemy Health, +100% pearls"
+  ],
+  [
+   "Rain Barrel",
+   "Rainy: +6000 ¥"
+  ],
+  [
+   "Mud",
+   "Rainy: -25% Enemy Speed"
   ],
   [
    "Sand Armor",
@@ -195,6 +239,26 @@
   [
    "Stardust",
    "Starfall: +6000 ¥"
+  ],
+  [
+   "Crosswind",
+   "Windy: +15% Cooldown, +50% pearls"
+  ],
+  [
+   "Gale",
+   "Windy: +15% Enemy Flying Chance, +50% pearls"
+  ],
+  [
+   "Cyclone",
+   "Windy: +30% Enemy Flying Chance, +25% Enemy Speed, +100% pearls"
+  ],
+  [
+   "Kite Strings",
+   "Windy: +75% Damage vs Flying"
+  ],
+  [
+   "Grounded",
+   "Windy: -20% Enemy Flying Chance"
   ]
  ],
  "SHWeatherCards_default": [
