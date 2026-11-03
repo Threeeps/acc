@@ -259,24 +259,24 @@
  ],
  "SHWeatherCards_default": [
   "Wishing Star",
-  "Stardust",
-  "Salvage",
-  "Buried Treasure",
   "Frostbite",
   "Low Tide",
+  "Mud",
+  "Firebreak",
   "Ice Breaker",
+  "Cinders",
   "Dispel",
   "Clear Skies",
   "Leyline",
   "Sandblast",
   "Mana Surge",
   "Bonfire",
-  "Rain Barrel",
-  "Firebreak",
-  "Mud",
-  "Cinders",
   "Kite Strings",
-  "Grounded"
+  "Grounded",
+  "Stardust",
+  "Salvage",
+  "Buried Treasure",
+  "Rain Barrel"
  ],
  "updated": "2026-11-02"
 }
