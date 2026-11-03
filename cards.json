@@ -237,6 +237,30 @@
    "Starfall: +6000 ¥"
   ],
   [
+   "Squall",
+   "Stormy: +25% Enemy Speed, +50% pearls"
+  ],
+  [
+   "Eye of the Storm",
+   "Stormy: +25% Range"
+  ],
+  [
+   "Supercell",
+   "Stormy: +50% Enemy Health, -15% Range, +100% pearls"
+  ],
+  [
+   "Conductor",
+   "Stormy: +75% Storm Damage Taken"
+  ],
+  [
+   "Thunderhead",
+   "Stormy: -15% Range, +50% pearls"
+  ],
+  [
+   "Lightning Rod",
+   "Stormy: -50% Lightning Strikes"
+  ],
+  [
    "Crosswind",
    "Windy: +15% Cooldown, +50% pearls"
   ],
@@ -278,5 +302,5 @@
   "Buried Treasure",
   "Rain Barrel"
  ],
- "updated": "2026-11-02"
+ "updated": "2026-11-03"
 }
