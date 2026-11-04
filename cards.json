@@ -65,6 +65,10 @@
    "-20% 敌人飞行几率, 风卡"
   ],
   [
+   "攻击二",
+   "+25% 攻击力"
+  ],
+  [
    "攻击我",
    "+12% 攻击力"
   ],
@@ -139,6 +143,10 @@
    "+6 Explosive Deaths Range"
   ],
   [
+   "Gale",
+   "+15% Enemy Flying Chance, +50% 夏日珍珠, 风卡"
+  ],
+  [
    "Plated Enemies",
    "+75 Enemy Physical Resist"
   ],
@@ -169,10 +177,6 @@
   [
    "冲洗",
    "+50% 敌人生命值, +50% 夏日珍珠, 雨卡"
-  ],
-  [
-   "凤凰城",
-   "+50% 敌人生命值, +25% 敌人速度, +100% 夏日珍珠, 地狱卡"
   ],
   [
    "大风",
@@ -311,6 +315,30 @@
   [
    "Firebreak",
    "Inferno: -30% Enemy Speed"
+  ],
+  [
+   "Arcane Storm",
+   "Magical: +150 Enemy Physical Resist, +50% Enemy Health, +100% pearls"
+  ],
+  [
+   "Mana Shield",
+   "Magical: +3 Enemy Shield, +50% pearls"
+  ],
+  [
+   "Mana Surge",
+   "Magical: +40% Magic Damage Taken"
+  ],
+  [
+   "Arcane Ward",
+   "Magical: +75 Enemy Physical Resist, +50% pearls"
+  ],
+  [
+   "Dispel",
+   "Magical: -110 Enemy Physical Resist"
+  ],
+  [
+   "Leyline",
+   "Magical: -15% Cooldown"
   ],
   [
    "Flash Flood",
